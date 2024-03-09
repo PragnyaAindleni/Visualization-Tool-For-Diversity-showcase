@@ -1,0 +1,52 @@
+#------------science and technology field---------------------------------------------
+#1 - women contributors---
+SELECT ?scientist ?scientistLabel ?gender ?field
+WHERE {
+  ?scientist wdt:P31 wd:Q5;  # Instance of human
+             wdt:P21 ?gender;  # Gender property
+             wdt:P106 wd:Q82594.  # Occupation: computer scientist
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+ORDER BY ?gender
+
+#2 - male contributors----------------------------------------------------------------------
+SELECT ?scientist ?scientistLabel ?gender
+WHERE {
+  ?scientist wdt:P31 wd:Q5;        # Instance of human
+             wdt:P21 wd:Q6581097;  # Gender: male
+             wdt:P106 wd:Q82594.   # Occupation: computer scientist
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+ORDER BY ?gender
+
+#3- count of no of male and female contributors in this field-------------------
+SELECT ?genderLabel (COUNT(?gender) as ?count)
+WHERE {
+  ?scientist wdt:P31 wd:Q5;          # Instance of human
+             wdt:P106 wd:Q82594;      # Occupation: computer scientist
+             wdt:P21 ?gender.         # Gender property
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+GROUP BY ?genderLabel
+
+#4- Publication date -----------------------------------------------------------
+
+SELECT ?article ?articleLabel ?publicationDate
+WHERE {
+  ?article wdt:P31 wd:Q13442814;           # Instance of scientific article
+           wdt:P585 ?publicationDate.      # Publication date property
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+ORDER BY ?publicationDate
+
+#5 NAtionality of contributors based on gender and their count-----------------
+SELECT ?genderLabel ?nationalityLabel (COUNT(?author) as ?count)
+WHERE {
+  ?author wdt:P31 wd:Q5;                # Instance of human
+          wdt:P106 wd:Q82594;           # Occupation: computer scientist (adjust as needed)
+          wdt:P21 ?gender;              # Gender property
+          wdt:P27 ?nationality.        # Nationality property
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+GROUP BY ?genderLabel ?nationalityLabel
+
